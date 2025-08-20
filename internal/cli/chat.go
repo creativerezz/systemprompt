@@ -18,10 +18,23 @@ func handleChatProcessing(currentFlags *Flags, registry *core.PluginRegistry, me
 	if messageTools != "" {
 		currentFlags.AppendMessage(messageTools)
 	}
+	// Check for pattern-specific model via environment variable
+	if currentFlags.Pattern != "" && currentFlags.Model == "" {
+		envVar := "FABRIC_MODEL_" + strings.ToUpper(strings.ReplaceAll(currentFlags.Pattern, "-", "_"))
+		if modelSpec := os.Getenv(envVar); modelSpec != "" {
+			parts := strings.SplitN(modelSpec, "|", 2)
+			if len(parts) == 2 {
+				currentFlags.Vendor = parts[0]
+				currentFlags.Model = parts[1]
+			} else {
+				currentFlags.Model = modelSpec
+			}
+		}
+	}
 
 	var chatter *core.Chatter
 	if chatter, err = registry.GetChatter(currentFlags.Model, currentFlags.ModelContextLength,
-		currentFlags.Strategy, currentFlags.Stream, currentFlags.DryRun); err != nil {
+		currentFlags.Vendor, currentFlags.Strategy, currentFlags.Stream, currentFlags.DryRun); err != nil {
 		return
 	}
 

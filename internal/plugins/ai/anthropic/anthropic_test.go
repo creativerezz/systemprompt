@@ -168,6 +168,15 @@ func TestBuildMessageParams_WithSearchAndLocation(t *testing.T) {
 	}
 }
 
+func TestModelBetasConfiguration(t *testing.T) {
+	client := NewClient()
+	model := string(anthropic.ModelClaudeSonnet4_20250514)
+	betas, ok := client.modelBetas[model]
+	if !ok || len(betas) != 1 || betas[0] != "context-1m-2025-08-07" {
+		t.Errorf("expected beta mapping for %s", model)
+	}
+}
+
 func TestCitationFormatting(t *testing.T) {
 	// Test the citation formatting logic by creating a mock message with citations
 	message := &anthropic.Message{

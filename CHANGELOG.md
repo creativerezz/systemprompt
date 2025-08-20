@@ -1,11 +1,173 @@
 # Changelog
 
+## v1.4.293 (2025-08-19)
+
+### PR [#1718](https://github.com/danielmiessler/Fabric/pull/1718) by [ksylvan](https://github.com/ksylvan): Implement Configurable Debug Logging Levels
+
+- Add --debug flag controlling runtime logging verbosity levels
+- Introduce internal/log package with Off, Basic, Detailed, Trace
+- Replace ad-hoc Debugf and globals with centralized debug logger
+- Wire debug level during early CLI argument parsing
+- Add bash, zsh, fish completions for --debug levels
+
+## v1.4.292 (2025-08-18)
+
+### PR [#1717](https://github.com/danielmiessler/Fabric/pull/1717) by [ksylvan](https://github.com/ksylvan): Highlight default vendor/model in model listing
+
+- Update PrintWithVendor signature to accept default vendor and model
+- Mark default vendor/model with asterisk in non-shell output
+- Compare vendor and model case-insensitively when marking
+- Pass registry defaults to PrintWithVendor from CLI
+- Add test ensuring default selection appears with asterisk
+### Direct commits
+
+- Docs: update version number in README updates section from v1.4.290 to v1.4.291
+
+## v1.4.291 (2025-08-18)
+
+### PR [#1715](https://github.com/danielmiessler/Fabric/pull/1715) by [ksylvan](https://github.com/ksylvan): feat: add speech-to-text via OpenAI with transcription flags and comp…
+
+- Add --transcribe-file flag to transcribe audio or video
+- Add --transcribe-model flag with model listing and completion
+- Add --split-media-file flag to chunk files over 25MB
+- Implement OpenAI transcription using Whisper and GPT-4o Transcribe
+- Integrate transcription pipeline into CLI before readability processing
+
+## v1.4.290 (2025-08-17)
+
+### PR [#1714](https://github.com/danielmiessler/Fabric/pull/1714) by [ksylvan](https://github.com/ksylvan): feat: add per-pattern model mapping support via environment variables
+
+- Add per-pattern model mapping support via environment variables
+- Implement environment variable lookup for pattern-specific models
+- Support vendor|model format in environment variable specification
+- Enable shell startup file configuration for patterns
+- Transform pattern names to uppercase environment variable format
+
+## v1.4.289 (2025-08-16)
+
+### PR [#1710](https://github.com/danielmiessler/Fabric/pull/1710) by [ksylvan](https://github.com/ksylvan): feat: add --no-variable-replacement flag to disable pattern variable …
+
+- Add --no-variable-replacement flag to disable pattern variable substitution
+- Introduce CLI flag to skip pattern variable replacement and wire it into domain request and session builder
+- Provide PatternsEntity.GetWithoutVariables for input-only pattern processing support
+- Refactor patterns code into reusable load and apply helpers
+- Update bash, zsh, fish completions with new flag and document in README and CLI help output
+
+## v1.4.288 (2025-08-16)
+
+### PR [#1709](https://github.com/danielmiessler/Fabric/pull/1709) by [ksylvan](https://github.com/ksylvan): Enhanced YouTube Subtitle Language Fallback Handling
+
+- Fix: improve YouTube subtitle language fallback handling in yt-dlp integration
+- Fix typo "Gemmini" to "Gemini" in README
+- Add "kballard" and "shellquote" to VSCode dictionary
+- Add "YTDLP" to VSCode spell checker
+- Enhance subtitle language options with fallback variants
+
+## v1.4.287 (2025-08-14)
+
+### PR [#1706](https://github.com/danielmiessler/Fabric/pull/1706) by [ksylvan](https://github.com/ksylvan): Gemini Thinking Support and README (New Features) automation
+
+- Add comprehensive "Recent Major Features" section to README
+- Introduce new readme_updates Python script for automation
+- Enable Gemini thinking configuration with token budgets
+- Update CLI help text for Gemini thinking support
+- Add comprehensive test coverage for Gemini thinking
+
+## v1.4.286 (2025-08-14)
+
+### PR [#1700](https://github.com/danielmiessler/Fabric/pull/1700) by [ksylvan](https://github.com/ksylvan): Introduce Thinking Config Across Anthropic and OpenAI Providers
+
+- Add --thinking CLI flag for configurable reasoning levels across providers
+- Implement Anthropic ThinkingConfig with standardized budgets and tokens
+- Map OpenAI reasoning effort from thinking levels
+- Show thinking level in dry-run formatted options
+- Overhaul suggest_pattern docs with categories, workflows, usage examples
+
+## v1.4.285 (2025-08-13)
+
+### PR [#1698](https://github.com/danielmiessler/Fabric/pull/1698) by [ksylvan](https://github.com/ksylvan): Enable One Million Token Context Beta Feature for Sonnet-4
+
+- Chore: upgrade anthropic-sdk-go to v1.9.1 and add beta feature support for context-1m
+- Add modelBetas map for beta feature configuration
+- Implement context-1m-2025-08-07 beta for Claude Sonnet 4
+- Add beta header support with fallback handling
+- Preserve existing beta headers in OAuth transport
+
+## v1.4.284 (2025-08-12)
+
+### PR [#1695](https://github.com/danielmiessler/Fabric/pull/1695) by [ksylvan](https://github.com/ksylvan): Introduce One-Liner Curl Install for Completions
+
+- Add one-liner curl install method for shell completions without requiring repository cloning
+- Support downloading completions when files are missing locally with dry-run option for previewing changes
+- Enable custom download source via environment variable and create temporary directory for downloaded completion files
+- Add automatic cleanup of temporary files and validate downloaded files are non-empty and not HTML
+- Improve error handling and standardize logging by routing informational messages to stderr to avoid stdout pollution
+
+## v1.4.283 (2025-08-12)
+
+### PR [#1692](https://github.com/danielmiessler/Fabric/pull/1692) by [ksylvan](https://github.com/ksylvan): Add Vendor Selection Support for Models
+
+- Add -V/--vendor flag to specify model vendor
+- Implement vendor-aware model resolution and availability validation
+- Warn on ambiguous models; suggest --vendor to disambiguate
+- Update bash, zsh, fish completions with vendor suggestions
+- Extend --listmodels to print vendor|model when interactive
+
+## v1.4.282 (2025-08-11)
+
+### PR [#1689](https://github.com/danielmiessler/Fabric/pull/1689) by [ksylvan](https://github.com/ksylvan): Enhanced Shell Completions for Fabric CLI Binaries
+
+- Add 'fabric-ai' alias support across all shell completions
+- Use invoked command name for dynamic completion list queries
+- Refactor fish completions into reusable registrar for multiple commands
+- Update Bash completion to reference executable via COMP_WORDS[0]
+- Install completions automatically with new cross-shell setup script
+
+## v1.4.281 (2025-08-11)
+
+### PR [#1687](https://github.com/danielmiessler/Fabric/pull/1687) by [ksylvan](https://github.com/ksylvan): Add Web Search Tool Support for Gemini Models
+
+- Enable Gemini models to use web search tool with --search flag
+- Add validation for search-location timezone and language code formats
+- Normalize language codes from underscores to hyphenated form
+- Append deduplicated web citations under standardized Sources section
+- Improve robustness for nil candidates and content parts
+
+## v1.4.280 (2025-08-10)
+
+### PR [#1686](https://github.com/danielmiessler/Fabric/pull/1686) by [ksylvan](https://github.com/ksylvan): Prevent duplicate text output in OpenAI streaming responses
+
+- Fix: prevent duplicate text output in OpenAI streaming responses
+- Skip processing of ResponseOutputTextDone events
+- Prevent doubled text in stream output
+- Add clarifying comment about API behavior
+- Maintain delta chunk streaming functionality
+
+## v1.4.279 (2025-08-10)
+
+### PR [#1685](https://github.com/danielmiessler/Fabric/pull/1685) by [ksylvan](https://github.com/ksylvan): Fix Gemini Role Mapping for API Compatibility
+
+- Fix Gemini role mapping to ensure proper API compatibility by converting chat roles to Gemini's user/model format
+- Map assistant role to model role per Gemini API constraints
+- Map system, developer, function, and tool roles to user role for proper handling
+- Default unrecognized roles to user role to preserve instruction context
+- Add comprehensive unit tests to validate convertMessages role mapping logic
+
+## v1.4.278 (2025-08-09)
+
+### PR [#1681](https://github.com/danielmiessler/Fabric/pull/1681) by [ksylvan](https://github.com/ksylvan): Enhance YouTube Support with Custom yt-dlp Arguments
+
+- Add `--yt-dlp-args` flag for custom YouTube downloader options with advanced control capabilities
+- Implement smart subtitle language fallback system when requested locale is unavailable
+- Add fallback logic for YouTube subtitle language detection with auto-detection of downloaded languages
+- Replace custom argument parser with shellquote and precompile regexes for improved performance and safety
+
 ## v1.4.277 (2025-08-08)
 
 ### PR [#1679](https://github.com/danielmiessler/Fabric/pull/1679) by [ksylvan](https://github.com/ksylvan): Add cross-platform desktop notifications to Fabric CLI
 
 - Add cross-platform desktop notifications with secure custom commands
-- Integrate notification sending into chat processing workflow  
+- Integrate notification sending into chat processing workflow
 - Add --notification and --notification-command CLI flags and help
 - Provide cross-platform providers: macOS, Linux, Windows with fallbacks
 - Escape shell metacharacters to prevent injection vulnerabilities
@@ -45,8 +207,7 @@
 
 ### Direct commits
 
-- Chore: remove redundant words
-Signed-off-by: queryfast <queryfast@outlook.com>
+- Remove redundant words from codebase
 - Fix typos in t_ patterns
 
 ## v1.4.272 (2025-07-28)

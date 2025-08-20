@@ -26,8 +26,8 @@ schema = 3
     version = "v1.3.3"
     hash = "sha256-jv7ZshpSd7FZzKKN6hqlUgiR8C3y85zNIS/hq7g76Ho="
   [mod."github.com/anthropics/anthropic-sdk-go"]
-    version = "v1.7.0"
-    hash = "sha256-DvpFXlUE04HeMbqQX4HIC/KMJYPXJ8rEaZkNJb1rWxs="
+    version = "v1.9.1"
+    hash = "sha256-1saDnM1DMnDLHT4RoA/EFuOvW7CIFh2tkfOJ1/+itNc="
   [mod."github.com/araddon/dateparse"]
     version = "v0.0.0-20210429162001-6b43995a97de"
     hash = "sha256-UuX84naeRGMsFOgIgRoBHG5sNy1CzBkWPKmd6VbLwFw="
@@ -199,6 +199,9 @@ schema = 3
   [mod."github.com/json-iterator/go"]
     version = "v1.1.12"
     hash = "sha256-To8A0h+lbfZ/6zM+2PpRpY3+L6725OPC66lffq6fUoM="
+  [mod."github.com/kballard/go-shellquote"]
+    version = "v0.0.0-20180428030007-95032a82bc51"
+    hash = "sha256-AOEdKETBMUC39ln6jBJ9NYdJWp++jV5lSbjNqG3dV+c="
   [mod."github.com/kevinburke/ssh_config"]
     version = "v1.2.0"
     hash = "sha256-Ta7ZOmyX8gG5tzWbY2oES70EJPfI90U7CIJS9EAce0s="
@@ -305,8 +308,8 @@ schema = 3
     version = "v0.18.0"
     hash = "sha256-tUpUPERjmRi7zldj0oPlnbnBhEkcI9iQGvP1HqlsK10="
   [mod."golang.org/x/crypto"]
-    version = "v0.39.0"
-    hash = "sha256-FtwjbVoAhZkx7F2hmzi9Y0J87CVVhWcrZzun+zWQLzc="
+    version = "v0.40.0"
+    hash = "sha256-I6p2fqvz63P9MwAuoQrljI7IUbfZQvCem0ii4Q2zZng="
   [mod."golang.org/x/exp"]
     version = "v0.0.0-20250531010427-b6e5de432a8b"
     hash = "sha256-QaFfjyB+pogCkUkJskR9xnXwkCOU828XJRrzwwLm6Ms="

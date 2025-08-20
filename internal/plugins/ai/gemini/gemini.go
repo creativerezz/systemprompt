@@ -5,6 +5,8 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/danielmiessler/fabric/internal/chat"
@@ -25,6 +27,24 @@ const (
 	MinAudioDataSize     = 44                // Minimum viable audio data
 	AudioDataPrefix      = "FABRIC_AUDIO_DATA:"
 )
+
+const (
+	citationHeader    = "\n\n## Sources\n\n"
+	citationSeparator = "\n"
+	citationFormat    = "- [%s](%s)"
+
+	errInvalidLocationFormat = "invalid search location format %q: must be timezone (e.g., 'America/Los_Angeles') or language code (e.g., 'en-US')"
+	locationSeparator        = "/"
+	langCodeSeparator        = "_"
+	langCodeNormalizedSep    = "-"
+
+	modelPrefix           = "models/"
+	modelTypeTTS          = "tts"
+	modelTypePreviewTTS   = "preview-tts"
+	modelTypeTextToSpeech = "text-to-speech"
+)
+
+var langCodeRegex = regexp.MustCompile(`^[a-z]{2}(-[A-Z]{2})?$`)
 
 func NewClient() (ret *Client) {
 	vendorName := "Gemini"
@@ -93,14 +113,13 @@ func (o *Client) Send(ctx context.Context, msgs []*chat.ChatCompletionMessage, o
 	// Convert messages to new SDK format
 	contents := o.convertMessages(msgs)
 
-	// Generate content
-	temperature := float32(opts.Temperature)
-	topP := float32(opts.TopP)
-	response, err := client.Models.GenerateContent(ctx, o.buildModelNameFull(opts.Model), contents, &genai.GenerateContentConfig{
-		Temperature:     &temperature,
-		TopP:            &topP,
-		MaxOutputTokens: int32(opts.ModelContextLength),
-	})
+	cfg, err := o.buildGenerateContentConfig(opts)
+	if err != nil {
+		return "", err
+	}
+
+	// Generate content with optional tools
+	response, err := client.Models.GenerateContent(ctx, o.buildModelNameFull(opts.Model), contents, cfg)
 	if err != nil {
 		return "", err
 	}
@@ -123,14 +142,13 @@ func (o *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.Cha
 	// Convert messages to new SDK format
 	contents := o.convertMessages(msgs)
 
-	// Generate streaming content
-	temperature := float32(opts.Temperature)
-	topP := float32(opts.TopP)
-	stream := client.Models.GenerateContentStream(ctx, o.buildModelNameFull(opts.Model), contents, &genai.GenerateContentConfig{
-		Temperature:     &temperature,
-		TopP:            &topP,
-		MaxOutputTokens: int32(opts.ModelContextLength),
-	})
+	cfg, err := o.buildGenerateContentConfig(opts)
+	if err != nil {
+		return err
+	}
+
+	// Generate streaming content with optional tools
+	stream := client.Models.GenerateContentStream(ctx, o.buildModelNameFull(opts.Model), contents, cfg)
 
 	for response, err := range stream {
 		if err != nil {
@@ -153,20 +171,109 @@ func (o *Client) NeedsRawMode(modelName string) bool {
 	return false
 }
 
+func parseThinkingConfig(level domain.ThinkingLevel) (*genai.ThinkingConfig, bool) {
+	lower := strings.ToLower(strings.TrimSpace(string(level)))
+	switch domain.ThinkingLevel(lower) {
+	case "", domain.ThinkingOff:
+		return nil, false
+	case domain.ThinkingLow, domain.ThinkingMedium, domain.ThinkingHigh:
+		if budget, ok := domain.ThinkingBudgets[domain.ThinkingLevel(lower)]; ok {
+			b := int32(budget)
+			return &genai.ThinkingConfig{IncludeThoughts: true, ThinkingBudget: &b}, true
+		}
+	default:
+		if tokens, err := strconv.ParseInt(lower, 10, 32); err == nil && tokens > 0 {
+			t := int32(tokens)
+			return &genai.ThinkingConfig{IncludeThoughts: true, ThinkingBudget: &t}, true
+		}
+	}
+	return nil, false
+}
+
+// buildGenerateContentConfig constructs the generation config with optional tools.
+// When search is enabled it injects the Google Search tool. The optional search
+// location accepts either:
+//   - A timezone in the format "Continent/City" (e.g., "America/Los_Angeles")
+//   - An ISO language code "ll" or "ll-CC" (e.g., "en" or "en-US")
+//
+// Underscores are normalized to hyphens. Returns an error if the location is
+// invalid.
+func (o *Client) buildGenerateContentConfig(opts *domain.ChatOptions) (*genai.GenerateContentConfig, error) {
+	temperature := float32(opts.Temperature)
+	topP := float32(opts.TopP)
+	cfg := &genai.GenerateContentConfig{
+		Temperature:     &temperature,
+		TopP:            &topP,
+		MaxOutputTokens: int32(opts.ModelContextLength),
+	}
+
+	if opts.Search {
+		cfg.Tools = []*genai.Tool{{GoogleSearch: &genai.GoogleSearch{}}}
+		if loc := opts.SearchLocation; loc != "" {
+			if isValidLocationFormat(loc) {
+				loc = normalizeLocation(loc)
+				cfg.ToolConfig = &genai.ToolConfig{
+					RetrievalConfig: &genai.RetrievalConfig{LanguageCode: loc},
+				}
+			} else {
+				return nil, fmt.Errorf(errInvalidLocationFormat, loc)
+			}
+		}
+	}
+
+	if tc, ok := parseThinkingConfig(opts.Thinking); ok {
+		cfg.ThinkingConfig = tc
+	}
+
+	return cfg, nil
+}
+
 // buildModelNameFull adds the "models/" prefix for API calls
 func (o *Client) buildModelNameFull(modelName string) string {
-	if strings.HasPrefix(modelName, "models/") {
+	if strings.HasPrefix(modelName, modelPrefix) {
 		return modelName
 	}
-	return "models/" + modelName
+	return modelPrefix + modelName
+}
+
+func isValidLocationFormat(location string) bool {
+	if strings.Contains(location, locationSeparator) {
+		parts := strings.Split(location, locationSeparator)
+		return len(parts) == 2 && parts[0] != "" && parts[1] != ""
+	}
+	return isValidLanguageCode(location)
+}
+
+func normalizeLocation(location string) string {
+	if strings.Contains(location, locationSeparator) {
+		return location
+	}
+	return strings.Replace(location, langCodeSeparator, langCodeNormalizedSep, 1)
+}
+
+// isValidLanguageCode reports whether the input is an ISO 639-1 language code
+// optionally followed by an ISO 3166-1 country code. Underscores are
+// normalized to hyphens before validation.
+func isValidLanguageCode(code string) bool {
+	normalized := strings.Replace(code, langCodeSeparator, langCodeNormalizedSep, 1)
+	parts := strings.Split(normalized, langCodeNormalizedSep)
+	switch len(parts) {
+	case 1:
+		return langCodeRegex.MatchString(strings.ToLower(parts[0]))
+	case 2:
+		formatted := strings.ToLower(parts[0]) + langCodeNormalizedSep + strings.ToUpper(parts[1])
+		return langCodeRegex.MatchString(formatted)
+	default:
+		return false
+	}
 }
 
 // isTTSModel checks if the model is a text-to-speech model
 func (o *Client) isTTSModel(modelName string) bool {
 	lowerModel := strings.ToLower(modelName)
-	return strings.Contains(lowerModel, "tts") ||
-		strings.Contains(lowerModel, "preview-tts") ||
-		strings.Contains(lowerModel, "text-to-speech")
+	return strings.Contains(lowerModel, modelTypeTTS) ||
+		strings.Contains(lowerModel, modelTypePreviewTTS) ||
+		strings.Contains(lowerModel, modelTypeTextToSpeech)
 }
 
 // extractTextForTTS extracts text content from chat messages for TTS generation
@@ -336,6 +443,19 @@ func (o *Client) convertMessages(msgs []*chat.ChatCompletionMessage) []*genai.Co
 	for _, msg := range msgs {
 		content := &genai.Content{Parts: []*genai.Part{}}
 
+		switch msg.Role {
+		case chat.ChatMessageRoleAssistant:
+			content.Role = "model"
+		case chat.ChatMessageRoleUser:
+			content.Role = "user"
+		case chat.ChatMessageRoleSystem, chat.ChatMessageRoleDeveloper, chat.ChatMessageRoleFunction, chat.ChatMessageRoleTool:
+			// Gemini's API only accepts "user" and "model" roles.
+			// Map all other roles to "user" to preserve instruction context.
+			content.Role = "user"
+		default:
+			content.Role = "user"
+		}
+
 		if msg.Content != "" {
 			content.Parts = append(content.Parts, &genai.Part{Text: msg.Content})
 		}
@@ -357,19 +477,71 @@ func (o *Client) convertMessages(msgs []*chat.ChatCompletionMessage) []*genai.Co
 	return contents
 }
 
-// extractTextFromResponse extracts text content from the response
+// extractTextFromResponse extracts text content from the response and appends
+// any web citations in a standardized format.
 func (o *Client) extractTextFromResponse(response *genai.GenerateContentResponse) string {
-	var result strings.Builder
+	if response == nil {
+		return ""
+	}
 
+	text := o.extractTextParts(response)
+	citations := o.extractCitations(response)
+	if len(citations) > 0 {
+		return text + citationHeader + strings.Join(citations, citationSeparator)
+	}
+	return text
+}
+
+func (o *Client) extractTextParts(response *genai.GenerateContentResponse) string {
+	var builder strings.Builder
 	for _, candidate := range response.Candidates {
-		if candidate.Content != nil {
-			for _, part := range candidate.Content.Parts {
-				if part.Text != "" {
-					result.WriteString(part.Text)
-				}
+		if candidate == nil || candidate.Content == nil {
+			continue
+		}
+		for _, part := range candidate.Content.Parts {
+			if part != nil && part.Text != "" {
+				builder.WriteString(part.Text)
 			}
 		}
 	}
+	return builder.String()
+}
 
-	return result.String()
+func (o *Client) extractCitations(response *genai.GenerateContentResponse) []string {
+	if response == nil || len(response.Candidates) == 0 {
+		return nil
+	}
+
+	citationMap := make(map[string]bool)
+	var citations []string
+	for _, candidate := range response.Candidates {
+		if candidate == nil || candidate.GroundingMetadata == nil {
+			continue
+		}
+		chunks := candidate.GroundingMetadata.GroundingChunks
+		if len(chunks) == 0 {
+			continue
+		}
+		for _, chunk := range chunks {
+			if chunk == nil || chunk.Web == nil {
+				continue
+			}
+			uri := chunk.Web.URI
+			title := chunk.Web.Title
+			if uri == "" || title == "" {
+				continue
+			}
+			var keyBuilder strings.Builder
+			keyBuilder.WriteString(uri)
+			keyBuilder.WriteByte('|')
+			keyBuilder.WriteString(title)
+			key := keyBuilder.String()
+			if !citationMap[key] {
+				citationMap[key] = true
+				citationText := fmt.Sprintf(citationFormat, title, uri)
+				citations = append(citations, citationText)
+			}
+		}
+	}
+	return citations
 }
