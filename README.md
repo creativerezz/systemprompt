@@ -57,6 +57,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
+- [v1.4.294](https://github.com/danielmiessler/fabric/releases/tag/v1.4.294) (Aug 20, 2025) — **Venice AI Support**: Added the Venice AI provider. Venice is a Privacy-First, Open-Source AI provider. See their ["About Venice"](https://docs.venice.ai/overview/about-venice) page for details.
 - [v1.4.291](https://github.com/danielmiessler/fabric/releases/tag/v1.4.291) (Aug 18, 2025) — **Speech To Text**: Add OpenAI speech-to-text support with `--transcribe-file`, `--transcribe-model`, and `--split-media-file` flags.
 - [v1.4.287](https://github.com/danielmiessler/fabric/releases/tag/v1.4.287) (Aug 16, 2025) — **AI Reasoning**: Add Thinking to Gemini models and introduce `readme_updates` python script
 - [v1.4.286](https://github.com/danielmiessler/fabric/releases/tag/v1.4.286) (Aug 14, 2025) — **AI Reasoning**: Introduce Thinking Config Across Anthropic and OpenAI Providers
@@ -139,6 +140,7 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
       - [Bash Completion](#bash-completion)
       - [Fish Completion](#fish-completion)
   - [Usage](#usage)
+    - [Debug Levels](#debug-levels)
   - [Our approach to prompting](#our-approach-to-prompting)
   - [Examples](#examples)
   - [Just use the Patterns](#just-use-the-patterns)
@@ -208,6 +210,17 @@ To install Fabric, you can use the latest release binaries or install it from th
 #### Windows
 
 `https://github.com/danielmiessler/fabric/releases/latest/download/fabric-windows-amd64.exe`
+
+Or via PowerShell, just copy and paste and run the following snippet to install the binary into `{HOME}\.local\bin`. Please make sure that directory is included in your `PATH`.
+
+```powershell
+$ErrorActionPreference = "Stop"
+$LATEST="https://github.com/danielmiessler/fabric/releases/latest/download/fabric-windows-amd64.exe"
+$DIR="${HOME}\.local\bin"
+New-Item -Path $DIR -ItemType Directory -Force
+Invoke-WebRequest -URI  "${LATEST}" -outfile "${DIR}\fabric.exe"
+& "${DIR}\fabric.exe" /version
+```
 
 #### macOS (arm64)
 

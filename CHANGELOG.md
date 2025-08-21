@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.294 (2025-08-20)
+
+### PR [#1723](https://github.com/danielmiessler/Fabric/pull/1723) by [ksylvan](https://github.com/ksylvan): docs: update README with Venice AI provider and Windows install script
+
+- Add Venice AI provider configuration with API endpoint
+- Document Venice AI as privacy-first open-source provider
+- Include PowerShell installation script for Windows users
+- Add debug levels section to table of contents
+- Update recent major features with v1.4.294 release notes
+
 ## v1.4.293 (2025-08-19)
 
 ### PR [#1718](https://github.com/danielmiessler/Fabric/pull/1718) by [ksylvan](https://github.com/ksylvan): Implement Configurable Debug Logging Levels
