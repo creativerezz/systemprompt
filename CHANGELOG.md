@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.295 (2025-08-24)
+
+### PR [#1727](https://github.com/danielmiessler/Fabric/pull/1727) by [ksylvan](https://github.com/ksylvan): Standardize Anthropic Beta Failure Logging
+
+- Refactor: route Anthropic beta failure logs through internal debug logger
+- Replace fmt.Fprintf stderr with debuglog.Debug for beta failures
+- Import internal log package and remove os dependency
+- Standardize logging level to debuglog.Basic for beta errors
+- Preserve fallback stream behavior when beta features fail
+
 ## v1.4.294 (2025-08-20)
 
 ### PR [#1723](https://github.com/danielmiessler/Fabric/pull/1723) by [ksylvan](https://github.com/ksylvan): docs: update README with Venice AI provider and Windows install script
