@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.296 (2025-08-26)
+
+### PR [#1728](https://github.com/danielmiessler/Fabric/pull/1728) by [ksylvan](https://github.com/ksylvan): Refactor Logging System to Use Centralized Debug Logger
+
+- Replace fmt.Fprintf/os.Stderr with centralized debuglog.Log across CLI and add unconditional Log function for important messages
+- Improve OAuth flow messaging and token refresh diagnostics with better error handling
+- Update tests to capture debuglog output via SetOutput for better test coverage
+- Convert Perplexity streaming errors to unified debug logging and emit file write notifications through debuglog
+- Standardize extension registry warnings and announce large audio processing steps via centralized logger
+
 ## v1.4.295 (2025-08-24)
 
 ### PR [#1727](https://github.com/danielmiessler/Fabric/pull/1727) by [ksylvan](https://github.com/ksylvan): Standardize Anthropic Beta Failure Logging
