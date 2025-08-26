@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.297 (2025-08-26)
+
+### PR [#1729](https://github.com/danielmiessler/Fabric/pull/1729) by [ksylvan](https://github.com/ksylvan): Add GitHub Community Health Documents
+
+- Add CODE_OF_CONDUCT defining respectful, collaborative community behavior
+- Add CONTRIBUTING with setup, testing, PR, changelog requirements
+- Add SECURITY policy with reporting process and response timelines
+- Add SUPPORT guide for bugs, features, discussions, expectations
+- Add docs README indexing guides, quick starts, contributor essentials
+
 ## v1.4.296 (2025-08-26)
 
 ### PR [#1728](https://github.com/danielmiessler/Fabric/pull/1728) by [ksylvan](https://github.com/ksylvan): Refactor Logging System to Use Centralized Debug Logger
