@@ -56,6 +56,7 @@
 		"godotenv",
 		"gofmt",
 		"goimports",
+		"golint",
 		"gomod",
 		"gonic",
 		"goopenai",
