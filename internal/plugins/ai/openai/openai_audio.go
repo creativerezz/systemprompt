@@ -64,7 +64,7 @@ func (o *Client) TranscribeFile(ctx context.Context, filePath, model string, spl
 		if !split {
 			return "", fmt.Errorf("file %s exceeds 25MB limit; use --split-media-file to enable automatic splitting", filePath)
 		}
-		debuglog.Debug(debuglog.Basic, "File %s is larger than the size limit... breaking it up into chunks...\n", filePath)
+		debuglog.Log("File %s is larger than the size limit... breaking it up into chunks...\n", filePath)
 		if files, cleanup, err = splitAudioFile(filePath, ext, MaxAudioFileSize); err != nil {
 			return "", err
 		}
@@ -75,7 +75,7 @@ func (o *Client) TranscribeFile(ctx context.Context, filePath, model string, spl
 
 	var builder strings.Builder
 	for i, f := range files {
-		debuglog.Debug(debuglog.Basic, "Using model %s to transcribe part %d (file name: %s)...\n", model, i+1, f)
+		debuglog.Log("Using model %s to transcribe part %d (file name: %s)...\n", model, i+1, f)
 		var chunk *os.File
 		if chunk, err = os.Open(f); err != nil {
 			return "", err
@@ -115,7 +115,7 @@ func splitAudioFile(src, ext string, maxSize int64) (files []string, cleanup fun
 	segmentTime := 600 // start with 10 minutes
 	for {
 		pattern := filepath.Join(dir, "chunk-%03d"+ext)
-		debuglog.Debug(debuglog.Basic, "Running ffmpeg to split audio into %d-second chunks...\n", segmentTime)
+		debuglog.Log("Running ffmpeg to split audio into %d-second chunks...\n", segmentTime)
 		cmd := exec.Command("ffmpeg", "-y", "-i", src, "-f", "segment", "-segment_time", fmt.Sprintf("%d", segmentTime), "-c", "copy", pattern)
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr

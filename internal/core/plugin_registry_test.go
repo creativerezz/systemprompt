@@ -10,6 +10,7 @@ import (
 
 	"github.com/danielmiessler/fabric/internal/chat"
 	"github.com/danielmiessler/fabric/internal/domain"
+	debuglog "github.com/danielmiessler/fabric/internal/log"
 	"github.com/danielmiessler/fabric/internal/plugins"
 	"github.com/danielmiessler/fabric/internal/plugins/ai"
 	"github.com/danielmiessler/fabric/internal/plugins/db/fsdb"
@@ -72,7 +73,12 @@ func TestGetChatter_WarnsOnAmbiguousModel(t *testing.T) {
 	r, w, _ := os.Pipe()
 	oldStderr := os.Stderr
 	os.Stderr = w
-	defer func() { os.Stderr = oldStderr }()
+	// Redirect log output to our pipe to capture unconditional log messages
+	debuglog.SetOutput(w)
+	defer func() {
+		os.Stderr = oldStderr
+		debuglog.SetOutput(oldStderr)
+	}()
 
 	chatter, err := registry.GetChatter("shared-model", 0, "", "", false, false)
 	w.Close()
