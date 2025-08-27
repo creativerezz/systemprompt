@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.298 (2025-08-27)
+
+### PR [#1730](https://github.com/danielmiessler/Fabric/pull/1730) by [ksylvan](https://github.com/ksylvan): Modernize Dockerfile with Best Practices Implementation
+
+- Remove docker-test framework and simplify production docker setup by eliminating complex testing infrastructure
+- Delete entire docker-test directory including test runner scripts and environment configuration files
+- Implement multi-stage build optimization in production Dockerfile to improve build efficiency
+- Remove docker-compose.yml and start-docker.sh helper scripts to streamline container workflow
+- Update README documentation with cleaner Docker usage instructions and reduced image size benefits
+
 ## v1.4.297 (2025-08-26)
 
 ### PR [#1729](https://github.com/danielmiessler/Fabric/pull/1729) by [ksylvan](https://github.com/ksylvan): Add GitHub Community Health Documents
