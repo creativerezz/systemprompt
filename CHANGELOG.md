@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.300 (2025-08-28)
+
+### PR [#1732](https://github.com/danielmiessler/Fabric/pull/1732) by [ksylvan](https://github.com/ksylvan): CI Infra: Changelog Generation Tool + Docker Image Pubishing
+
+- Add GitHub Actions workflow to publish Docker images on tags
+- Build multi-arch images with Buildx and QEMU across amd64, arm64
+- Tag images using semver; push to GHCR and Docker Hub
+- Gate patterns workflow steps on detected changes instead of failing
+- Auto-detect GitHub owner and repo from git remote URL
+
 ## v1.4.299 (2025-08-27)
 
 ### PR [#1731](https://github.com/danielmiessler/Fabric/pull/1731) by [ksylvan](https://github.com/ksylvan): chore: upgrade ollama dependency from v0.9.0 to v0.11.7
