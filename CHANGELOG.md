@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.302 (2025-08-28)
+
+### PR [#1737](https://github.com/danielmiessler/Fabric/pull/1737) by [ksylvan](https://github.com/ksylvan) and [OmriH-Elister](https://github.com/OmriH-Elister): Add New Psychological Analysis Patterns + devalue version bump
+
+- Add create_story_about_person system pattern with narrative workflow
+- Add heal_person system pattern for compassionate healing plans
+- Update pattern_explanations to register new patterns and renumber indices
+- Extend pattern_descriptions with entries, tags, and concise descriptions
+- Bump devalue dependency from 5.1.1 to 5.3.2
+
 ## v1.4.301 (2025-08-28)
 
 ### PR [#1735](https://github.com/danielmiessler/Fabric/pull/1735) by [ksylvan](https://github.com/ksylvan): Fix Docker Build Path Configuration
