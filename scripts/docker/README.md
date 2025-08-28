@@ -46,3 +46,15 @@ docker run --rm -it -p 8080:8080 -v $HOME/.fabric-config:/root/.config/fabric fa
 ```
 
 The API will be available at `http://localhost:8080`.
+
+## Multi-arch builds and GHCR packages
+
+For multi-arch Docker builds (such as those used for GitHub Container Registry packages), the description should be set via annotations in the manifest instead of the Dockerfile LABEL. When building multi-arch images, ensure the build configuration includes:
+
+```json
+"annotations": {
+  "org.opencontainers.image.description": "A Docker image for running the Fabric CLI. See https://github.com/danielmiessler/Fabric/tree/main/scripts/docker for details."
+}
+```
+
+This ensures that GHCR packages display the proper description.

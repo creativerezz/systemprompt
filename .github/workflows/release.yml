@@ -28,6 +28,8 @@ jobs:
         run: go test -v ./...
 
   build:
+    # only run in main upstream repo
+    if: ${{ github.repository_owner == 'danielmiessler' }}
     name: Build & Release with Goreleaser
     needs: [test]
     runs-on: ubuntu-latest
@@ -48,4 +50,4 @@ jobs:
           distribution: goreleaser
           args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets._GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -16,6 +16,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /fabric ./cmd/fabric
 
 FROM alpine:latest
 
+LABEL org.opencontainers.image.description="A Docker image for running the Fabric CLI. See https://github.com/danielmiessler/Fabric/tree/main/scripts/docker for details."
+
 RUN apk add --no-cache ca-certificates \
     && mkdir -p /root/.config/fabric
 

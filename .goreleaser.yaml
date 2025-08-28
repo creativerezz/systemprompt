@@ -1,10 +1,4 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
-
-# The lines below are called `modelines`. See `:help modeline`
-# Feel free to remove those if you don't want/need to use them.
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+# Read the documentation at https://goreleaser.com
 
 version: 2
 
@@ -26,7 +20,6 @@ builds:
     main: ./cmd/fabric
     binary: fabric
 
-
 archives:
   - formats: [tar.gz]
     # this name template makes the OS and Arch compatible with the results of `uname`.
@@ -41,36 +34,3 @@ archives:
     format_overrides:
       - goos: windows
         formats: [zip]
-
-winget:
-  - name: Fabric
-    publisher: danielmiessler
-    license: MIT
-    homepage: https://github.com/danielmiessler/fabric
-    copyright: Daniel Miessler
-    short_description: open-source AI framework for augmenting
-    repository:
-      owner: danielmiessler
-      name: winget-pkgs
-      branch: "danielmiessler.Fabric-{{.Version}}"
-      pull_request:
-        enabled: true
-        draft: true
-        base:
-          owner: microsoft
-          name: winget-pkgs
-          branch: master
-
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - "^docs:"
-      - "^test:"
-
-release:
-  footer: >-
-
-    ---
-
-    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
