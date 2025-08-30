@@ -9,7 +9,7 @@ import (
 	"github.com/danielmiessler/fabric/internal/cli"
 )
 
-var version = "dev" // This would normally be set at build time
+// var version is defined in version.go
 
 func main() {
 	err := cli.Cli(version)

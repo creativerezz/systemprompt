@@ -2,6 +2,7 @@ package restapi
 
 import (
 	"log/slog"
+	"net/http"
 
 	"github.com/danielmiessler/fabric/internal/core"
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,14 @@ func Serve(registry *core.PluginRegistry, address string, apiKey string) (err er
 	// Middleware
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+
+	// Health check endpoint (no auth required)
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "healthy",
+			"service": "fabric-api",
+		})
+	})
 
 	if apiKey != "" {
 		r.Use(APIKeyMiddleware(apiKey))

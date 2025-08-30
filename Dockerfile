@@ -13,31 +13,38 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Build the application
+# Build only the fabric binary
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o fabric ./cmd/fabric
 
-# Use alpine for final image for smaller size
+# Use alpine for final image
 FROM alpine:latest
 
-# Install ca-certificates for HTTPS requests and bash for startup script
-RUN apk --no-cache add ca-certificates tzdata bash
+# Install ca-certificates for HTTPS requests
+RUN apk --no-cache add ca-certificates tzdata
 
-WORKDIR /root/
+WORKDIR /app
 
 # Copy the binary from builder
-COPY --from=builder /app/fabric .
+COPY --from=builder /app/fabric ./fabric
 
-# Create startup script to handle PORT environment variable
-RUN echo '#!/bin/bash' > start.sh && \
-    echo 'PORT=${PORT:-8080}' >> start.sh && \
-    echo './fabric --serve --address ":$PORT"' >> start.sh && \
-    chmod +x start.sh
+# Make binary executable
+RUN chmod +x ./fabric
 
-# Create necessary directories
+# Create config directory
 RUN mkdir -p /root/.config/fabric
 
-# Set the binary as executable
-RUN chmod +x ./fabric
+# Default port (Railway will override this)
+ENV PORT=8080
+
+# Create startup script that properly handles the PORT environment variable
+RUN echo '#!/bin/sh' > start.sh && \
+    echo 'PORT=${PORT:-8080}' >> start.sh && \
+    echo 'echo "Starting Fabric API server on port $PORT"' >> start.sh && \
+    echo 'exec ./fabric --serve --address "0.0.0.0:$PORT"' >> start.sh && \
+    chmod +x start.sh
+
+# Expose default port (Railway will map to the correct one)
+EXPOSE 8080
 
 # Run the startup script
 CMD ["./start.sh"]
