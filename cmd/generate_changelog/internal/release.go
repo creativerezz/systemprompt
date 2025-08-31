@@ -101,17 +101,49 @@ func (rm *ReleaseManager) UpdateReleaseDescription(version string) error {
 		client = github.NewClient(nil)
 	}
 
-	release, _, err := client.Repositories.GetReleaseByTag(ctx, rm.owner, rm.repo, version)
+	// Check if current repository is a fork by getting repo details
+	repo, _, err := client.Repositories.Get(ctx, rm.owner, rm.repo)
+	if err != nil {
+		return fmt.Errorf("failed to get repository info: %w", err)
+	}
+
+	// If repository is a fork, try updating the upstream (parent) repository first
+	if repo.Parent != nil {
+		parentOwner := repo.Parent.Owner.GetLogin()
+		parentRepo := repo.Parent.GetName()
+
+		fmt.Printf("Repository is a fork of %s/%s, attempting to update upstream release...\n", parentOwner, parentRepo)
+
+		err := rm.updateReleaseForRepo(ctx, client, parentOwner, parentRepo, version, releaseBody)
+		if err == nil {
+			fmt.Printf("Successfully updated release description for %s in upstream repository %s/%s\n", version, parentOwner, parentRepo)
+			return nil
+		}
+
+		fmt.Printf("Failed to update upstream repository: %v\nFalling back to current repository...\n", err)
+	}
+
+	// Update current repository (either not a fork or upstream update failed)
+	err = rm.updateReleaseForRepo(ctx, client, rm.owner, rm.repo, version, releaseBody)
+	if err != nil {
+		return fmt.Errorf("failed to update release description for version %s in repository %s/%s: %w", version, rm.owner, rm.repo, err)
+	}
+
+	fmt.Printf("Successfully updated release description for %s in repository %s/%s\n", version, rm.owner, rm.repo)
+	return nil
+}
+
+func (rm *ReleaseManager) updateReleaseForRepo(ctx context.Context, client *github.Client, owner, repo, version, releaseBody string) error {
+	release, _, err := client.Repositories.GetReleaseByTag(ctx, owner, repo, version)
 	if err != nil {
 		return fmt.Errorf("failed to get release for version %s: %w", version, err)
 	}
 
 	release.Body = &releaseBody
-	_, _, err = client.Repositories.EditRelease(ctx, rm.owner, rm.repo, *release.ID, release)
+	_, _, err = client.Repositories.EditRelease(ctx, owner, repo, *release.ID, release)
 	if err != nil {
 		return fmt.Errorf("failed to update release description for version %s: %w", version, err)
 	}
 
-	fmt.Printf("Successfully updated release description for %s\n", version)
 	return nil
 }

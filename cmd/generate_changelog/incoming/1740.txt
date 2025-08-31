@@ -1,0 +1,7 @@
+### PR [#1740](https://github.com/danielmiessler/Fabric/pull/1740) by [ksylvan](https://github.com/ksylvan): Restore our custom Changelog Updates in GitHub Actions
+
+- Add changelog generation step to GitHub release workflow
+- Create updateReleaseForRepo helper method for release updates
+- Add fork detection logic in UpdateReleaseDescription method
+- Implement upstream repository release update for forks
+- Enhance error handling with detailed repository context
