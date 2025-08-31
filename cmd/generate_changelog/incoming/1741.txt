@@ -1,6 +1,0 @@
-### PR [#1741](https://github.com/danielmiessler/Fabric/pull/1741) by [ksylvan](https://github.com/ksylvan): CI: Fix Release Description Update
-
-- Fix: update release workflow to support manual dispatch with custom tag
-- Support custom tag from client payload in workflow
-- Fallback to github.ref_name when no custom tag provided
-- Enable manual release triggers with specified tag parameter

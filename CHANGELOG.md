@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.4.305 (2025-08-31)
+
+### PR [#1741](https://github.com/danielmiessler/Fabric/pull/1741) by [ksylvan](https://github.com/ksylvan): CI: Fix Release Description Update
+
+- Fix: update release workflow to support manual dispatch with custom tag
+- Support custom tag from client payload in workflow
+- Fallback to github.ref_name when no custom tag provided
+- Enable manual release triggers with specified tag parameter
+
 ## v1.4.304 (2025-08-31)
 
 ### PR [#1740](https://github.com/danielmiessler/Fabric/pull/1740) by [ksylvan](https://github.com/ksylvan): Restore our custom Changelog Updates in GitHub Actions
