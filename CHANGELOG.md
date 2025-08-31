@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.303 (2025-08-28)
+
+### PR [#1736](https://github.com/danielmiessler/Fabric/pull/1736) by [tonymet](https://github.com/tonymet): Winget Publishing and GoReleaser
+
+- Added GoReleaser support for improved package distribution
+- Winget and Docker publishing moved to ksylvan/fabric-packager GitHub repo
+- Hardened release pipeline by gating workflows to upstream owner only
+- Migrated from custom tokens to built-in GITHUB_TOKEN for enhanced security
+- Removed docker-publish-on-tag workflow to reduce duplication and complexity
+- Added ARM binary release support with updated documentation
+
 ## v1.4.302 (2025-08-28)
 
 ### PR [#1737](https://github.com/danielmiessler/Fabric/pull/1737) by [ksylvan](https://github.com/ksylvan) and [OmriH-Elister](https://github.com/OmriH-Elister): Add New Psychological Analysis Patterns + devalue version bump
