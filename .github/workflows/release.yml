@@ -52,6 +52,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Release Description
-        run: go run ./cmd/generate_changelog --release ${{ github.ref_name }}
+        run: go run ./cmd/generate_changelog --release ${{ github.event.client_payload.tag || github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
