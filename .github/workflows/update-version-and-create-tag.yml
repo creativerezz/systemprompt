@@ -11,6 +11,7 @@ on:
       - "cmd/generate_changelog/incoming/*.txt"
       - "scripts/pattern_descriptions/*.json"
       - "web/static/data/pattern_descriptions.json"
+      - "**/*.md"
 
 permissions:
   contents: write # Ensure the workflow has write permissions

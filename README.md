@@ -118,16 +118,12 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
     - [Breaking problems into components](#breaking-problems-into-components)
     - [Too many prompts](#too-many-prompts)
   - [Installation](#installation)
-    - [Get Latest Release Binaries](#get-latest-release-binaries)
-      - [Windows](#windows)
-      - [macOS (arm64)](#macos-arm64)
-      - [macOS (amd64)](#macos-amd64)
-      - [Linux (amd64)](#linux-amd64)
-      - [Linux (arm64)](#linux-arm64)
+    - [One-Line Install (Recommended)](#one-line-install-recommended)
+    - [Manual Binary Downloads](#manual-binary-downloads)
     - [Using package managers](#using-package-managers)
       - [macOS (Homebrew)](#macos-homebrew)
       - [Arch Linux (AUR)](#arch-linux-aur)
-      - [Windows](#windows-1)
+      - [Windows](#windows)
     - [From Source](#from-source)
     - [Docker](#docker)
     - [Environment Variables](#environment-variables)
@@ -213,38 +209,25 @@ Fabric has Patterns for all sorts of life and work activities, including:
 
 ## Installation
 
-To install Fabric, you can use the latest release binaries or install it from the source.
+### One-Line Install (Recommended)
 
-### Get Latest Release Binaries
+**Unix/Linux/macOS:**
 
-#### Windows
-
-Via PowerShell, just copy and paste and run the following snippet to install the binary into `{HOME}\.local\bin`. Please make sure that directory is included in your `PATH`.
-
-```powershell
-$ErrorActionPreference = "Stop"
-$LATEST="https://github.com/danielmiessler/fabric/releases/latest/download/fabric-windows-amd64.exe"
-$DIR="${HOME}\.local\bin"
-New-Item -Path $DIR -ItemType Directory -Force
-Invoke-WebRequest -URI  "${LATEST}" -outfile "${DIR}\fabric.exe"
-& "${DIR}\fabric.exe" /version
+```bash
+curl -fsSL https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh | bash
 ```
 
-#### macOS (arm64)
+**Windows PowerShell:**
 
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-darwin-arm64 > fabric && chmod +x fabric && ./fabric --version`
+```powershell
+iwr -useb https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.ps1 | iex
+```
 
-#### macOS (amd64)
+> See [scripts/installer/README.md](./scripts/installer/README.md) for custom installation options and troubleshooting.
 
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-darwin-amd64 > fabric && chmod +x fabric && ./fabric --version`
+### Manual Binary Downloads
 
-#### Linux (amd64)
-
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-linux-amd64 > fabric && chmod +x fabric && ./fabric --version`
-
-#### Linux (arm64)
-
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-linux-arm64 > fabric && chmod +x fabric && ./fabric --version`
+The latest release binary archives and their expected SHA256 hashes can be found at <https://github.com/danielmiessler/fabric/releases/latest>
 
 ### Using package managers
 
