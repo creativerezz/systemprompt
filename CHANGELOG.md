@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.307 (2025-09-01)
+
+### PR [#1745](https://github.com/danielmiessler/Fabric/pull/1745) by [ksylvan](https://github.com/ksylvan): Fabric Installation Improvements and Automated Release Updates
+
+- Streamlined install process with one-line installer scripts and updated documentation
+- Added bash installer script for Unix systems
+- Added PowerShell installer script for Windows
+- Created installer documentation with usage examples
+- Simplified README installation with one-line installers
+
 ## v1.4.306 (2025-09-01)
 
 ### PR [#1742](https://github.com/danielmiessler/Fabric/pull/1742) by [ksylvan](https://github.com/ksylvan): Documentation and Pattern Updates
