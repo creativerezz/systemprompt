@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.306 (2025-09-01)
+
+### PR [#1742](https://github.com/danielmiessler/Fabric/pull/1742) by [ksylvan](https://github.com/ksylvan): Documentation and Pattern Updates
+
+- Add winget installation method for Windows users
+- Include Docker Hub and GHCR image references with docker run examples
+- Remove deprecated PowerShell download link and unused show_fabric_options_markmap pattern
+- Update suggest_pattern with new AI patterns
+- Add personal development patterns for storytelling
+
 ## v1.4.305 (2025-08-31)
 
 ### PR [#1741](https://github.com/danielmiessler/Fabric/pull/1741) by [ksylvan](https://github.com/ksylvan): CI: Fix Release Description Update
