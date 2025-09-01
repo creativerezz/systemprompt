@@ -1333,14 +1333,6 @@
       ]
     },
     {
-      "patternName": "show_fabric_options_markmap",
-      "description": "Visualize Fabric capabilities using Markmap syntax.",
-      "tags": [
-        "VISUALIZE",
-        "DEVELOPMENT"
-      ]
-    },
-    {
       "patternName": "solve_with_cot",
       "description": "Solve problems using chain-of-thought reasoning.",
       "tags": [

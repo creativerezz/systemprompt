@@ -904,10 +904,6 @@ Create Mermaid diagrams to visualize workflows in documentation.
 
 Transform concepts to ASCII art with explanations of relationships.
 
-### show_fabric_options_markmap
-
-Visualize Fabric capabilities using Markmap syntax.
-
 ### t_visualize_mission_goals_projects
 
 Visualize missions and goals to clarify relationships.
@@ -942,6 +938,10 @@ Identify neglected goals to surface opportunities.
 
 ## PERSONAL DEVELOPMENT PATTERNS
 
+### create_story_about_person
+
+Infer everyday challenges and realistic coping strategies from a psychological profile and craft an empathetic 500–700-word story consistent with the character.
+
 ### extract_recipe
 
 Extract/format recipes into instructions with ingredients and steps.
@@ -949,6 +949,10 @@ Extract/format recipes into instructions with ingredients and steps.
 ### find_female_life_partner
 
 Clarify and summarize partner criteria in direct language.
+
+### heal_person
+
+Analyze a psychological profile, pinpoint issues and strengths, and deliver compassionate, structured strategies for spiritual, mental, and life improvement.
 
 ## CREATIVITY PATTERNS
 

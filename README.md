@@ -127,7 +127,9 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
     - [Using package managers](#using-package-managers)
       - [macOS (Homebrew)](#macos-homebrew)
       - [Arch Linux (AUR)](#arch-linux-aur)
+      - [Windows](#windows-1)
     - [From Source](#from-source)
+    - [Docker](#docker)
     - [Environment Variables](#environment-variables)
     - [Setup](#setup)
     - [Per-Pattern Model Mapping](#per-pattern-model-mapping)
@@ -217,9 +219,7 @@ To install Fabric, you can use the latest release binaries or install it from th
 
 #### Windows
 
-`https://github.com/danielmiessler/fabric/releases/latest/download/fabric-windows-amd64.exe`
-
-Or via PowerShell, just copy and paste and run the following snippet to install the binary into `{HOME}\.local\bin`. Please make sure that directory is included in your `PATH`.
+Via PowerShell, just copy and paste and run the following snippet to install the binary into `{HOME}\.local\bin`. Please make sure that directory is included in your `PATH`.
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -263,6 +263,12 @@ alias fabric='fabric-ai'
 
 `yay -S fabric-ai`
 
+#### Windows
+
+Use the official Microsoft supported `Winget` tool:
+
+`winget install danielmiessler.Fabric`
+
 ### From Source
 
 To install Fabric, [make sure Go is installed](https://go.dev/doc/install), and then run the following command.
@@ -271,6 +277,35 @@ To install Fabric, [make sure Go is installed](https://go.dev/doc/install), and 
 # Install Fabric directly from the repo
 go install github.com/danielmiessler/fabric/cmd/fabric@latest
 ```
+
+### Docker
+
+Run Fabric using pre-built Docker images:
+
+```bash
+# Use latest image from Docker Hub
+docker run --rm -it kayvan/fabric:latest --version
+
+# Use specific version from GHCR
+docker run --rm -it ghcr.io/ksylvan/fabric:v1.4.305 --version
+
+# Run setup (first time)
+mkdir -p $HOME/.fabric-config
+docker run --rm -it -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest --setup
+
+# Use Fabric with your patterns
+docker run --rm -it -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest -p summarize
+
+# Run the REST API server
+docker run --rm -it -p 8080:8080 -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest --serve
+```
+
+**Images available at:**
+
+- Docker Hub: [kayvan/fabric](https://hub.docker.com/repository/docker/kayvan/fabric/general)
+- GHCR: [ksylvan/fabric](https://github.com/ksylvan/fabric/pkgs/container/fabric)
+
+See [scripts/docker/README.md](./scripts/docker/README.md) for building custom images and advanced configuration.
 
 ### Environment Variables
 
