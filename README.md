@@ -1,7 +1,18 @@
 <div align="center">
-Fabric is graciously supported by…
+    <a href="https://go.warp.dev/fabric" target="_blank">
+        <sup>Special thanks to:</sup>
+        <br>
+        <img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-02.png">
+        <br>
+        <h>Warp, built for coding with multiple AI agents</b>
+        <br>
+        <sup>Available for macOS, Linux and Windows</sup>
+    </a>
+</div>
 
-[![Github Repo Tagline](https://github.com/user-attachments/assets/96ab3d81-9b13-4df4-ba09-75dee7a5c3d2)](https://warp.dev/fabric)
+<br>
+
+<div align="center">
 
 <img src="./docs/images/fabric-logo-gif.gif" alt="fabriclogo" width="400" height="400"/>
 
@@ -16,6 +27,10 @@ Fabric is graciously supported by…
 
 <div align="center">
 <h4><code>fabric</code> is an open-source framework for augmenting humans using AI.</h4>
+</div>
+
+![Screenshot of fabric](./docs/images/fabric-summarize.png)
+
 </div>
 
 [Updates](#updates) •
