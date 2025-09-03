@@ -1,7 +1,14 @@
-<div align="center">
-Fabric is graciously supported by…
+<p align="center">
+  <a href="http://go.warp.dev/fabric" target="_blank">
+    <img src="https://raw.githubusercontent.com/warpdotdev/brand-assets/main/Github/Sponsor/warp-banner-light.png" alt="Warp - built for coding with multiple AI agents" width="600"/>
+  </a>
+</p>
 
-[![Github Repo Tagline](https://github.com/user-attachments/assets/96ab3d81-9b13-4df4-ba09-75dee7a5c3d2)](https://warp.dev/fabric)
+<p align="center">
+  <em>Warp, built for coding with multiple AI agents.</em>
+</p>
+
+<div align="center">
 
 <img src="./docs/images/fabric-logo-gif.gif" alt="fabriclogo" width="400" height="400"/>
 
