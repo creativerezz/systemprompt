@@ -1,0 +1,78 @@
+name: Deploy to Railway
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # Railway auth and targeting
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+      RAILWAY_SERVICE_NAME: ${{ secrets.RAILWAY_SERVICE_NAME }}
+      # App configuration (provide as GitHub Secrets; do NOT commit real values)
+      DEFAULT_VENDOR: ${{ secrets.DEFAULT_VENDOR }}
+      DEFAULT_MODEL: ${{ secrets.DEFAULT_MODEL }}
+      PATTERNS_LOADER_GIT_REPO_URL: ${{ secrets.PATTERNS_LOADER_GIT_REPO_URL }}
+      PATTERNS_LOADER_GIT_REPO_PATTERNS_FOLDER: ${{ secrets.PATTERNS_LOADER_GIT_REPO_PATTERNS_FOLDER }}
+      PROMPT_STRATEGIES_GIT_REPO_URL: ${{ secrets.PROMPT_STRATEGIES_GIT_REPO_URL }}
+      PROMPT_STRATEGIES_GIT_REPO_STRATEGIES_FOLDER: ${{ secrets.PROMPT_STRATEGIES_GIT_REPO_STRATEGIES_FOLDER }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_API_BASE_URL: ${{ secrets.OPENAI_API_BASE_URL }}
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      # Either FABRIC_API_KEY or API_KEY can be used to secure endpoints
+      FABRIC_API_KEY: ${{ secrets.FABRIC_API_KEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: |
+          npm install -g @railway/cli
+          railway --version
+
+      - name: Verify Railway auth env
+        run: |
+          test -n "$RAILWAY_TOKEN" || (echo "RAILWAY_TOKEN not set" && exit 1)
+          test -n "$RAILWAY_PROJECT_ID" || (echo "RAILWAY_PROJECT_ID not set" && exit 1)
+
+      - name: Link project
+        run: |
+          if [ -n "$RAILWAY_SERVICE_NAME" ]; then
+            railway link --project "$RAILWAY_PROJECT_ID" --service "$RAILWAY_SERVICE_NAME"
+          else
+            railway link --project "$RAILWAY_PROJECT_ID"
+          fi
+
+      - name: Set environment variables in Railway
+        run: |
+          set -e
+          set -x
+          kv() { [ -n "$2" ] && railway variables set "$1=$2" || true; }
+          kv DEFAULT_VENDOR "$DEFAULT_VENDOR"
+          kv DEFAULT_MODEL "$DEFAULT_MODEL"
+          kv PATTERNS_LOADER_GIT_REPO_URL "$PATTERNS_LOADER_GIT_REPO_URL"
+          kv PATTERNS_LOADER_GIT_REPO_PATTERNS_FOLDER "$PATTERNS_LOADER_GIT_REPO_PATTERNS_FOLDER"
+          kv PROMPT_STRATEGIES_GIT_REPO_URL "$PROMPT_STRATEGIES_GIT_REPO_URL"
+          kv PROMPT_STRATEGIES_GIT_REPO_STRATEGIES_FOLDER "$PROMPT_STRATEGIES_GIT_REPO_STRATEGIES_FOLDER"
+          kv OPENAI_API_KEY "$OPENAI_API_KEY"
+          kv OPENAI_API_BASE_URL "$OPENAI_API_BASE_URL"
+          kv YOUTUBE_API_KEY "$YOUTUBE_API_KEY"
+          kv FABRIC_API_KEY "$FABRIC_API_KEY"
+          kv API_KEY "$API_KEY"
+
+      - name: Deploy (Remote build via Dockerfile)
+        run: |
+          if [ -n "$RAILWAY_SERVICE_NAME" ]; then
+            railway up --service "$RAILWAY_SERVICE_NAME" --detach
+          else
+            railway up --detach
+          fi
+

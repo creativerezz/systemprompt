@@ -4,19 +4,32 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/danielmiessler/fabric/internal/api"
 	"github.com/danielmiessler/fabric/internal/core"
+	"github.com/danielmiessler/fabric/internal/plugins/db/fsdb"
 )
 
 func main() {
 	// Load configuration from environment variables
 	config := api.LoadConfig()
 
+	// Initialize Fabric database
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("Failed to get home directory: %v", err)
+	}
+	configDir := filepath.Join(homeDir, ".config", "fabric")
+	fabricDb := fsdb.NewDb(configDir)
+
 	// Initialize Fabric core
-	registry := core.NewPluginRegistry()
-	if err := registry.Setup(); err != nil {
-		log.Fatalf("Failed to setup Fabric core: %v", err)
+	registry, err := core.NewPluginRegistry(fabricDb)
+	if err != nil {
+		log.Fatalf("Failed to create Fabric registry: %v", err)
+	}
+	if err := registry.Configure(); err != nil {
+		log.Fatalf("Failed to configure Fabric core: %v", err)
 	}
 
 	// Configure AI vendors

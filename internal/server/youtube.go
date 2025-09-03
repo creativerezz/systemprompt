@@ -24,9 +24,14 @@ type YouTubeResponse struct {
 }
 
 func NewYouTubeHandler(r *gin.Engine, registry *core.PluginRegistry) *YouTubeHandler {
-	handler := &YouTubeHandler{yt: registry.YouTube}
-	r.POST("/youtube/transcript", handler.Transcript)
-	return handler
+    handler := &YouTubeHandler{yt: registry.YouTube}
+    r.POST("/youtube/transcript", handler.Transcript)
+    // Convenience GET endpoints to fetch transcript by video ID
+    // Example: GET /transcript/VIDEO_ID?language=en&timestamps=true
+    r.GET("/transcript/:videoid", handler.TranscriptByID)
+    // Also provide a namespaced variant for consistency
+    r.GET("/youtube/transcript/:videoid", handler.TranscriptByID)
+    return handler
 }
 
 func (h *YouTubeHandler) Transcript(c *gin.Context) {
@@ -66,5 +71,37 @@ func (h *YouTubeHandler) Transcript(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, YouTubeResponse{Transcript: transcript, Title: videoID})
+    c.JSON(http.StatusOK, YouTubeResponse{Transcript: transcript, Title: videoID})
+}
+
+// TranscriptByID handles GET /transcript/:videoid (and /youtube/transcript/:videoid)
+// Query params:
+//   - language: language code (default: en)
+//   - timestamps: if "true", include timestamps in transcript
+func (h *YouTubeHandler) TranscriptByID(c *gin.Context) {
+    videoID := c.Param("videoid")
+    if videoID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "videoid is required"})
+        return
+    }
+
+    language := c.DefaultQuery("language", "en")
+    timestamps := c.DefaultQuery("timestamps", "false") == "true"
+
+    var (
+        transcript string
+        err        error
+    )
+
+    if timestamps {
+        transcript, err = h.yt.GrabTranscriptWithTimestamps(videoID, language)
+    } else {
+        transcript, err = h.yt.GrabTranscript(videoID, language)
+    }
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, YouTubeResponse{Transcript: transcript, Title: videoID})
 }

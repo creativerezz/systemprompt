@@ -25,7 +25,10 @@ This guide will help you deploy the Fabric AI framework as a web-accessible API 
    OPENAI_API_KEY=your_openai_api_key_here
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
    GEMINI_API_KEY=your_gemini_api_key_here
-   FABRIC_API_KEY=your_secure_api_key_for_endpoints (optional but recommended)
+   # One of these will secure the API (start script supports both):
+   FABRIC_API_KEY=your_secure_api_key_for_endpoints
+   # or
+   API_KEY=your_secure_api_key_for_endpoints
    ```
 
 4. **Deploy** - Railway will automatically build and deploy your API
@@ -56,7 +59,10 @@ This guide will help you deploy the Fabric AI framework as a web-accessible API 
    railway variables set OPENAI_API_KEY=your_key_here
    railway variables set ANTHROPIC_API_KEY=your_key_here
    railway variables set GEMINI_API_KEY=your_key_here
+   # One of these will secure the API (start script supports both)
    railway variables set FABRIC_API_KEY=your_secure_api_key
+   # or
+   railway variables set API_KEY=your_secure_api_key
    ```
 
 ## Environment Variables
@@ -95,7 +101,9 @@ Once deployed, your API will be available at `https://your-railway-app.railway.a
 - `GET /config` - Get current configuration
 
 **YouTube Processing:**
-- `POST /youtube/transcript` - Extract YouTube transcripts
+- `POST /youtube/transcript` - Extract YouTube transcripts by URL
+- `GET /transcript/{videoid}` - Extract transcript by video ID (query: `language`, `timestamps`)
+- `GET /youtube/transcript/{videoid}` - Same as above, namespaced
 
 ### Example API Usage
 
@@ -108,7 +116,7 @@ Once deployed, your API will be available at `https://your-railway-app.railway.a
    ```bash
    curl -X POST https://your-app.railway.app/chat \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer YOUR_FABRIC_API_KEY" \
+     -H "X-API-Key: YOUR_FABRIC_API_KEY" \
      -d '{
        "prompts": [{
          "userInput": "Explain quantum computing",
@@ -122,6 +130,24 @@ Once deployed, your API will be available at `https://your-railway-app.railway.a
 3. **Get available models:**
    ```bash
    curl https://your-app.railway.app/models/names
+   ```
+
+4. **Get YouTube transcript by video ID (GET):**
+   ```bash
+   curl "https://your-app.railway.app/transcript/VIDEO_ID?language=en&timestamps=true" \
+     -H "X-API-Key: YOUR_FABRIC_API_KEY"
+   ```
+
+5. **Get YouTube transcript by URL (POST):**
+   ```bash
+   curl -X POST https://your-app.railway.app/youtube/transcript \
+     -H "Content-Type: application/json" \
+     -H "X-API-Key: YOUR_FABRIC_API_KEY" \
+     -d '{
+       "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+       "language": "en",
+       "timestamps": true
+     }'
    ```
 
 ## Security Considerations
@@ -138,7 +164,8 @@ Once deployed, your API will be available at `https://your-railway-app.railway.a
 1. **Build fails**: Check that all dependencies in `go.mod` are accessible
 2. **API returns 500**: Check Railway logs for missing environment variables
 3. **AI requests fail**: Verify your AI provider API keys are correct
-4. **403 Forbidden**: Make sure you're including the `Authorization: Bearer YOUR_FABRIC_API_KEY` header if set
+4. **403 Forbidden**: Make sure you're including the `X-API-Key: YOUR_FABRIC_API_KEY` header if you configured an API key
+5. **YouTube transcript errors**: Ensure yt-dlp is available (the provided Dockerfile installs it) and YouTube URL/ID is valid. For rate limits or auth requirements, pass cookies via yt-dlp args in the CLI or run later.
 
 ### View Logs
 ```bash

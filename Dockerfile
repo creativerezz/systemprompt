@@ -20,7 +20,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o fabric ./cmd/fabr
 FROM alpine:latest
 
 # Install ca-certificates for HTTPS requests
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add ca-certificates tzdata python3 py3-pip \
+    && pip3 install --no-cache-dir yt-dlp \
+    && rm -rf /root/.cache/pip
 
 WORKDIR /app
 
@@ -39,8 +41,13 @@ ENV PORT=8080
 # Create startup script that properly handles the PORT environment variable
 RUN echo '#!/bin/sh' > start.sh && \
     echo 'PORT=${PORT:-8080}' >> start.sh && \
+    echo 'API="${FABRIC_API_KEY:-$API_KEY}"' >> start.sh && \
     echo 'echo "Starting Fabric API server on port $PORT"' >> start.sh && \
-    echo 'exec ./fabric --serve --address "0.0.0.0:$PORT"' >> start.sh && \
+    echo 'if [ -n "$API" ]; then' >> start.sh && \
+    echo '  exec ./fabric --serve --address "0.0.0.0:$PORT" --api-key "$API"' >> start.sh && \
+    echo 'else' >> start.sh && \
+    echo '  exec ./fabric --serve --address "0.0.0.0:$PORT"' >> start.sh && \
+    echo 'fi' >> start.sh && \
     chmod +x start.sh
 
 # Expose default port (Railway will map to the correct one)
