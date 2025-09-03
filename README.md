@@ -1,12 +1,16 @@
-<p align="center">
-  <a href="http://go.warp.dev/fabric" target="_blank">
-    <img src="https://raw.githubusercontent.com/warpdotdev/brand-assets/main/Github/Sponsor/warp-banner-light.png" alt="Warp - built for coding with multiple AI agents" width="600"/>
-  </a>
-</p>
+<div align="center">
+    <a href="https://go.warp.dev/fabric" target="_blank">
+        <sup>Special thanks to:</sup>
+        <br>
+        <img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-02.png">
+        <br>
+        <h>Warp, built for coding with multiple AI agents</b>
+        <br>
+        <sup>Available for macOS, Linux and Windows</sup>
+    </a>
+</div>
 
-<p align="center">
-  <em>Warp, built for coding with multiple AI agents.</em>
-</p>
+<br>
 
 <div align="center">
 
