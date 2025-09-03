@@ -10,6 +10,7 @@ import (
 	"github.com/danielmiessler/fabric/internal/plugins/ai/openai"
 	"github.com/danielmiessler/fabric/internal/tools/converter"
 	"github.com/danielmiessler/fabric/internal/tools/youtube"
+	"github.com/danielmiessler/fabric/internal/tui"
 )
 
 // Cli Controls the cli. It takes in the flags and runs the appropriate functions
@@ -46,6 +47,11 @@ func Cli(version string) (err error) {
 	// Configure OpenAI Responses API setting based on CLI flag
 	if registry != nil {
 		configureOpenAIResponsesAPI(registry, currentFlags.DisableResponsesAPI)
+	}
+
+	// Handle TUI launch
+	if currentFlags.TUI {
+		return launchTUI(registry)
 	}
 
 	// Handle setup and server commands
@@ -180,4 +186,14 @@ func configureOpenAIResponsesAPI(registry *core.PluginRegistry, disableResponses
 			}
 		}
 	}
+}
+
+// launchTUI launches the terminal user interface
+func launchTUI(registry *core.PluginRegistry) error {
+	app, err := tui.NewTViewAppWithRegistry(registry)
+	if err != nil {
+		return fmt.Errorf("failed to create TUI app: %w", err)
+	}
+
+	return app.Start()
 }

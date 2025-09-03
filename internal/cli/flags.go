@@ -30,6 +30,7 @@ type Flags struct {
 	Session                         string               `long:"session" description:"Choose a session from the available sessions"`
 	Attachments                     []string             `short:"a" long:"attachment" description:"Attachment path or URL (e.g. for OpenAI image recognition messages)"`
 	Setup                           bool                 `short:"S" long:"setup" description:"Run setup for all reconfigurable parts of fabric"`
+	TUI                             bool                 `short:"i" long:"tui" description:"Launch interactive terminal user interface"`
 	Temperature                     float64              `short:"t" long:"temperature" yaml:"temperature" description:"Set temperature" default:"0.7"`
 	TopP                            float64              `short:"T" long:"topp" yaml:"topp" description:"Set top P" default:"0.9"`
 	Stream                          bool                 `short:"s" long:"stream" yaml:"stream" description:"Stream"`

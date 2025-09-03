@@ -155,6 +155,13 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
       - [Fish Completion](#fish-completion)
   - [Usage](#usage)
     - [Debug Levels](#debug-levels)
+  - [Terminal User Interface (TUI)](#terminal-user-interface-tui)
+    - [TUI Overview](#tui-overview)
+    - [TUI Installation](#tui-installation)
+    - [TUI Navigation](#tui-navigation)
+    - [TUI Features](#tui-features)
+    - [YouTube Processing](#youtube-processing)
+    - [TUI Setup](#tui-setup)
   - [Our approach to prompting](#our-approach-to-prompting)
   - [Examples](#examples)
   - [Just use the Patterns](#just-use-the-patterns)
@@ -696,6 +703,169 @@ Use the `--debug` flag to control runtime logging:
 - `1`: basic debug info
 - `2`: detailed debugging
 - `3`: trace level
+
+## Terminal User Interface (TUI)
+
+Fabric now includes a powerful **Terminal User Interface (TUI)** built with tview, providing an interactive way to use Fabric patterns, process YouTube videos, and chat with AI directly in your terminal.
+
+### TUI Overview
+
+The Fabric TUI offers:
+- 🎯 **Interactive Pattern Browser** - Browse and search through all available Fabric patterns
+- 💬 **Real-time AI Chat** - Chat with AI using selected patterns with real responses
+- 📺 **YouTube Processing** - Extract transcripts, metadata, and comments from YouTube videos
+- ⚙️ **Settings Management** - Configure models, API keys, and preferences
+- 📖 **Built-in Help** - Comprehensive documentation and keyboard shortcuts
+- 🎨 **Beautiful Interface** - Modern terminal UI with colors and smooth navigation
+
+### TUI Installation
+
+The TUI is included with Fabric and ready to use:
+
+```bash
+# Launch integrated TUI mode (recommended)
+fabric --tui
+fabric -i
+
+# Or build and run standalone TUI
+go build -o fabric-tui cmd/fabric-tui/main.go
+./fabric-tui
+```
+
+### TUI Navigation
+
+**Global Shortcuts (work from any view):**
+- `Tab` - Cycle through all views (Home → Patterns → Chat → YouTube → Help → Settings)
+- `Esc` - Return to Home page from any view
+- `Ctrl+C` or `Q` - Quit application
+
+**From Home Page:**
+- `P` - Browse Patterns
+- `C` - Open Chat Interface  
+- `Y` - YouTube Processing
+- `H` - Help & Documentation
+- `S` - Settings
+
+**Pattern Browser:**
+- `↑/↓` arrows - Navigate through available patterns
+- `Enter` - Select pattern and go to chat
+- `j/k` - Vim-style navigation
+- `/` - Filter/search patterns
+- `Esc` - Clear filter or return to Home
+
+**Chat Interface:**
+- Type message and press `Enter` - Send message to AI
+- `↑/↓` arrows - Scroll through chat history
+- Messages are processed using the selected pattern
+
+### TUI Features
+
+#### Pattern Browser
+- Browse all available Fabric patterns with descriptions
+- Real pattern loading from your `~/.config/fabric/patterns/` directory
+- Search and filter patterns by name
+- Select patterns for use in chat or YouTube processing
+
+#### Interactive Chat
+- Real-time chat with AI using selected patterns
+- Pattern-specific processing and responses
+- Message history with timestamps
+- Scrollable chat interface
+- Integration with your configured AI providers
+
+#### YouTube Processing
+- Process any YouTube URL (youtube.com/watch?v= or youtu.be/)
+- Extract real video transcripts using yt-dlp
+- Get actual video metadata (title, duration, views, channel)
+- Fetch real comments from videos
+- Automatic AI analysis if a pattern is selected
+- Background processing with status updates
+
+#### Settings & Configuration  
+- Configure AI models and providers
+- Adjust temperature and generation parameters
+- Manage API keys and authentication
+- Set custom patterns directory
+
+### YouTube Processing
+
+The TUI includes powerful YouTube processing capabilities:
+
+**Supported URL Formats:**
+```bash
+https://www.youtube.com/watch?v=VIDEO_ID
+https://youtu.be/VIDEO_ID
+```
+
+**What it extracts:**
+- **Full Transcripts** - Complete video transcripts with accurate text
+- **Video Metadata** - Title, channel, duration, view count, publish date
+- **Comments** - Top comments from the video
+- **AI Analysis** - Process content with selected patterns (summarize, extract wisdom, etc.)
+
+**Requirements for YouTube Processing:**
+```bash
+# Install yt-dlp for full functionality
+pip install yt-dlp
+
+# Ensure it's in your PATH
+yt-dlp --version
+```
+
+### TUI Setup
+
+**For Real AI Responses:**
+1. Configure API keys in `~/.config/fabric/.env`:
+   ```bash
+   OPENAI_API_KEY=your_openai_key_here
+   ANTHROPIC_API_KEY=your_claude_key_here
+   GEMINI_API_KEY=your_gemini_key_here
+   ```
+
+2. Run Fabric setup:
+   ```bash
+   fabric --setup
+   ```
+
+**For YouTube Processing:**
+```bash
+# Install yt-dlp
+pip install yt-dlp
+
+# Test installation
+yt-dlp --version
+```
+
+**For Custom Patterns:**
+```bash
+# Update built-in patterns
+fabric --updatepatterns
+
+# Custom patterns directory
+# Configure via Settings in TUI or fabric --setup
+```
+
+**Example TUI Workflows:**
+
+1. **Analyze YouTube Video:**
+   ```bash
+   fabric --tui
+   # Press P → select "extract_wisdom" → Enter → Y → paste URL → Enter
+   ```
+
+2. **Summarize Long Text:**
+   ```bash
+   fabric --tui  
+   # Press P → select "summarize" → Enter → C → paste text → Enter
+   ```
+
+3. **Get Help:**
+   ```bash
+   fabric --tui
+   # Press H for comprehensive help and documentation
+   ```
+
+The TUI provides a modern, interactive way to use all of Fabric's capabilities with an intuitive terminal interface, perfect for users who prefer command-line workflows but want the convenience of a graphical interface.
 
 ## Our approach to prompting
 

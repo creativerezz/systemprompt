@@ -12,6 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/bedrock v1.34.1
 	github.com/aws/aws-sdk-go-v2/service/bedrockruntime v1.30.0
 	github.com/gabriel-vasile/mimetype v1.4.9
+	github.com/gdamore/tcell/v2 v2.9.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-git/go-git/v5 v5.16.2
 	github.com/go-shiori/go-readability v0.0.0-20250217085726-9f5bf5ca7612
@@ -25,19 +26,25 @@ require (
 	github.com/openai/openai-go v1.8.2
 	github.com/otiai10/copy v1.14.1
 	github.com/pkg/errors v0.9.1
+	github.com/rivo/tview v0.0.0-20250625164341-a4a78f1e05cb
 	github.com/samber/lo v1.50.0
 	github.com/sgaunet/perplexity-go/v2 v2.8.0
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/oauth2 v0.30.0
-	golang.org/x/text v0.27.0
+	golang.org/x/text v0.28.0
 	google.golang.org/api v0.236.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
+	github.com/gdamore/encoding v1.0.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
+	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
+	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/rivo/uniseg v0.4.7 // indirect
+	golang.org/x/term v0.34.0 // indirect
 )
 
 require (
@@ -121,7 +128,7 @@ require (
 	golang.org/x/exp v0.0.0-20250531010427-b6e5de432a8b // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	google.golang.org/genai v1.17.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
