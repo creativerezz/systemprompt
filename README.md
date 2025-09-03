@@ -25,6 +25,10 @@
 <h4><code>fabric</code> is an open-source framework for augmenting humans using AI.</h4>
 </div>
 
+![Screenshot of fabric](./docs/images/fabric-summarize.png)
+
+</div>
+
 [Updates](#updates) •
 [What and Why](#what-and-why) •
 [Philosophy](#philosophy) •
