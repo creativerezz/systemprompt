@@ -9,6 +9,7 @@ import (
 
 	"github.com/danielmiessler/fabric/internal/core"
 	"github.com/danielmiessler/fabric/internal/domain"
+	debuglog "github.com/danielmiessler/fabric/internal/log"
 	"github.com/danielmiessler/fabric/internal/plugins/db/fsdb"
 	"github.com/danielmiessler/fabric/internal/tools/notifications"
 )
@@ -135,7 +136,7 @@ func handleChatProcessing(currentFlags *Flags, registry *core.PluginRegistry, me
 	if chatOptions.Notification {
 		if err = sendNotification(chatOptions, chatReq.PatternName, result); err != nil {
 			// Log notification error but don't fail the main command
-			fmt.Fprintf(os.Stderr, "Failed to send notification: %v\n", err)
+			debuglog.Log("Failed to send notification: %v\n", err)
 		}
 	}
 

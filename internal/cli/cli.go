@@ -3,10 +3,10 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/danielmiessler/fabric/internal/core"
+	debuglog "github.com/danielmiessler/fabric/internal/log"
 	"github.com/danielmiessler/fabric/internal/plugins/ai/openai"
 	"github.com/danielmiessler/fabric/internal/tools/converter"
 	"github.com/danielmiessler/fabric/internal/tools/youtube"
@@ -35,7 +35,7 @@ func Cli(version string) (err error) {
 	var registry, err2 = initializeFabric()
 	if err2 != nil {
 		if !currentFlags.Setup {
-			fmt.Fprintln(os.Stderr, err2.Error())
+			debuglog.Log("%s\n", err2.Error())
 			currentFlags.Setup = true
 		}
 		// Return early if registry is nil to prevent panics in subsequent handlers

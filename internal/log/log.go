@@ -61,6 +61,15 @@ func Debug(l Level, format string, a ...interface{}) {
 	}
 }
 
+// Log writes a message unconditionally to stderr.
+// This is for important messages that should always be shown regardless of debug level.
+func Log(format string, a ...interface{}) {
+	mu.RLock()
+	w := output
+	mu.RUnlock()
+	fmt.Fprintf(w, format, a...)
+}
+
 // SetOutput allows overriding the output destination for debug logs.
 func SetOutput(w io.Writer) {
 	mu.Lock()

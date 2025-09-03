@@ -1,7 +1,18 @@
 <div align="center">
-Fabric is graciously supported by…
+    <a href="https://go.warp.dev/fabric" target="_blank">
+        <sup>Special thanks to:</sup>
+        <br>
+        <img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-02.png">
+        <br>
+        <h>Warp, built for coding with multiple AI agents</b>
+        <br>
+        <sup>Available for macOS, Linux and Windows</sup>
+    </a>
+</div>
 
-[![Github Repo Tagline](https://github.com/user-attachments/assets/96ab3d81-9b13-4df4-ba09-75dee7a5c3d2)](https://warp.dev/fabric)
+<br>
+
+<div align="center">
 
 <img src="./docs/images/fabric-logo-gif.gif" alt="fabriclogo" width="400" height="400"/>
 
@@ -16,6 +27,10 @@ Fabric is graciously supported by…
 
 <div align="center">
 <h4><code>fabric</code> is an open-source framework for augmenting humans using AI.</h4>
+</div>
+
+![Screenshot of fabric](./docs/images/fabric-summarize.png)
+
 </div>
 
 [Updates](#updates) •
@@ -57,6 +72,7 @@ Below are the **new features and capabilities** we've added (newest first):
 
 ### Recent Major Features
 
+- [v1.4.303](https://github.com/danielmiessler/fabric/releases/tag/v1.4.303) (Aug 29, 2025) — **New Binary Releases**: Linux ARM and Windows ARM targets. You can run Fabric on the Raspberry PI and on your Windows Surface!
 - [v1.4.294](https://github.com/danielmiessler/fabric/releases/tag/v1.4.294) (Aug 20, 2025) — **Venice AI Support**: Added the Venice AI provider. Venice is a Privacy-First, Open-Source AI provider. See their ["About Venice"](https://docs.venice.ai/overview/about-venice) page for details.
 - [v1.4.291](https://github.com/danielmiessler/fabric/releases/tag/v1.4.291) (Aug 18, 2025) — **Speech To Text**: Add OpenAI speech-to-text support with `--transcribe-file`, `--transcribe-model`, and `--split-media-file` flags.
 - [v1.4.287](https://github.com/danielmiessler/fabric/releases/tag/v1.4.287) (Aug 16, 2025) — **AI Reasoning**: Add Thinking to Gemini models and introduce `readme_updates` python script
@@ -117,16 +133,14 @@ Keep in mind that many of these were recorded when Fabric was Python-based, so r
     - [Breaking problems into components](#breaking-problems-into-components)
     - [Too many prompts](#too-many-prompts)
   - [Installation](#installation)
-    - [Get Latest Release Binaries](#get-latest-release-binaries)
-      - [Windows](#windows)
-      - [macOS (arm64)](#macos-arm64)
-      - [macOS (amd64)](#macos-amd64)
-      - [Linux (amd64)](#linux-amd64)
-      - [Linux (arm64)](#linux-arm64)
+    - [One-Line Install (Recommended)](#one-line-install-recommended)
+    - [Manual Binary Downloads](#manual-binary-downloads)
     - [Using package managers](#using-package-managers)
       - [macOS (Homebrew)](#macos-homebrew)
       - [Arch Linux (AUR)](#arch-linux-aur)
+      - [Windows](#windows)
     - [From Source](#from-source)
+    - [Docker](#docker)
     - [Environment Variables](#environment-variables)
     - [Setup](#setup)
     - [Per-Pattern Model Mapping](#per-pattern-model-mapping)
@@ -210,40 +224,25 @@ Fabric has Patterns for all sorts of life and work activities, including:
 
 ## Installation
 
-To install Fabric, you can use the latest release binaries or install it from the source.
+### One-Line Install (Recommended)
 
-### Get Latest Release Binaries
+**Unix/Linux/macOS:**
 
-#### Windows
-
-`https://github.com/danielmiessler/fabric/releases/latest/download/fabric-windows-amd64.exe`
-
-Or via PowerShell, just copy and paste and run the following snippet to install the binary into `{HOME}\.local\bin`. Please make sure that directory is included in your `PATH`.
-
-```powershell
-$ErrorActionPreference = "Stop"
-$LATEST="https://github.com/danielmiessler/fabric/releases/latest/download/fabric-windows-amd64.exe"
-$DIR="${HOME}\.local\bin"
-New-Item -Path $DIR -ItemType Directory -Force
-Invoke-WebRequest -URI  "${LATEST}" -outfile "${DIR}\fabric.exe"
-& "${DIR}\fabric.exe" /version
+```bash
+curl -fsSL https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh | bash
 ```
 
-#### macOS (arm64)
+**Windows PowerShell:**
 
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-darwin-arm64 > fabric && chmod +x fabric && ./fabric --version`
+```powershell
+iwr -useb https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.ps1 | iex
+```
 
-#### macOS (amd64)
+> See [scripts/installer/README.md](./scripts/installer/README.md) for custom installation options and troubleshooting.
 
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-darwin-amd64 > fabric && chmod +x fabric && ./fabric --version`
+### Manual Binary Downloads
 
-#### Linux (amd64)
-
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-linux-amd64 > fabric && chmod +x fabric && ./fabric --version`
-
-#### Linux (arm64)
-
-`curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric-linux-arm64 > fabric && chmod +x fabric && ./fabric --version`
+The latest release binary archives and their expected SHA256 hashes can be found at <https://github.com/danielmiessler/fabric/releases/latest>
 
 ### Using package managers
 
@@ -262,6 +261,12 @@ alias fabric='fabric-ai'
 
 `yay -S fabric-ai`
 
+#### Windows
+
+Use the official Microsoft supported `Winget` tool:
+
+`winget install danielmiessler.Fabric`
+
 ### From Source
 
 To install Fabric, [make sure Go is installed](https://go.dev/doc/install), and then run the following command.
@@ -270,6 +275,35 @@ To install Fabric, [make sure Go is installed](https://go.dev/doc/install), and 
 # Install Fabric directly from the repo
 go install github.com/danielmiessler/fabric/cmd/fabric@latest
 ```
+
+### Docker
+
+Run Fabric using pre-built Docker images:
+
+```bash
+# Use latest image from Docker Hub
+docker run --rm -it kayvan/fabric:latest --version
+
+# Use specific version from GHCR
+docker run --rm -it ghcr.io/ksylvan/fabric:v1.4.305 --version
+
+# Run setup (first time)
+mkdir -p $HOME/.fabric-config
+docker run --rm -it -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest --setup
+
+# Use Fabric with your patterns
+docker run --rm -it -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest -p summarize
+
+# Run the REST API server
+docker run --rm -it -p 8080:8080 -v $HOME/.fabric-config:/root/.config/fabric kayvan/fabric:latest --serve
+```
+
+**Images available at:**
+
+- Docker Hub: [kayvan/fabric](https://hub.docker.com/repository/docker/kayvan/fabric/general)
+- GHCR: [ksylvan/fabric](https://github.com/ksylvan/fabric/pkgs/container/fabric)
+
+See [scripts/docker/README.md](./scripts/docker/README.md) for building custom images and advanced configuration.
 
 ### Environment Variables
 

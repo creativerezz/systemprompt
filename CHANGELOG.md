@@ -1,5 +1,135 @@
 # Changelog
 
+## v1.4.307 (2025-09-01)
+
+### PR [#1745](https://github.com/danielmiessler/Fabric/pull/1745) by [ksylvan](https://github.com/ksylvan): Fabric Installation Improvements and Automated Release Updates
+
+- Streamlined install process with one-line installer scripts and updated documentation
+- Added bash installer script for Unix systems
+- Added PowerShell installer script for Windows
+- Created installer documentation with usage examples
+- Simplified README installation with one-line installers
+
+## v1.4.306 (2025-09-01)
+
+### PR [#1742](https://github.com/danielmiessler/Fabric/pull/1742) by [ksylvan](https://github.com/ksylvan): Documentation and Pattern Updates
+
+- Add winget installation method for Windows users
+- Include Docker Hub and GHCR image references with docker run examples
+- Remove deprecated PowerShell download link and unused show_fabric_options_markmap pattern
+- Update suggest_pattern with new AI patterns
+- Add personal development patterns for storytelling
+
+## v1.4.305 (2025-08-31)
+
+### PR [#1741](https://github.com/danielmiessler/Fabric/pull/1741) by [ksylvan](https://github.com/ksylvan): CI: Fix Release Description Update
+
+- Fix: update release workflow to support manual dispatch with custom tag
+- Support custom tag from client payload in workflow
+- Fallback to github.ref_name when no custom tag provided
+- Enable manual release triggers with specified tag parameter
+
+## v1.4.304 (2025-08-31)
+
+### PR [#1740](https://github.com/danielmiessler/Fabric/pull/1740) by [ksylvan](https://github.com/ksylvan): Restore our custom Changelog Updates in GitHub Actions
+
+- Add changelog generation step to GitHub release workflow
+- Create updateReleaseForRepo helper method for release updates
+- Add fork detection logic in UpdateReleaseDescription method
+- Implement upstream repository release update for forks
+- Enhance error handling with detailed repository context
+
+## v1.4.303 (2025-08-28)
+
+### PR [#1736](https://github.com/danielmiessler/Fabric/pull/1736) by [tonymet](https://github.com/tonymet): Winget Publishing and GoReleaser
+
+- Added GoReleaser support for improved package distribution
+- Winget and Docker publishing moved to ksylvan/fabric-packager GitHub repo
+- Hardened release pipeline by gating workflows to upstream owner only
+- Migrated from custom tokens to built-in GITHUB_TOKEN for enhanced security
+- Removed docker-publish-on-tag workflow to reduce duplication and complexity
+- Added ARM binary release support with updated documentation
+
+## v1.4.302 (2025-08-28)
+
+### PR [#1737](https://github.com/danielmiessler/Fabric/pull/1737) by [ksylvan](https://github.com/ksylvan) and [OmriH-Elister](https://github.com/OmriH-Elister): Add New Psychological Analysis Patterns + devalue version bump
+
+- Add create_story_about_person system pattern with narrative workflow
+- Add heal_person system pattern for compassionate healing plans
+- Update pattern_explanations to register new patterns and renumber indices
+- Extend pattern_descriptions with entries, tags, and concise descriptions
+- Bump devalue dependency from 5.1.1 to 5.3.2
+
+## v1.4.301 (2025-08-28)
+
+### PR [#1735](https://github.com/danielmiessler/Fabric/pull/1735) by [ksylvan](https://github.com/ksylvan): Fix Docker Build Path Configuration
+
+- Fix: update Docker workflow to use specific Dockerfile and monitor markdown file changes
+- Add explicit Dockerfile path to Docker build action
+- Remove markdown files from workflow paths-ignore filter
+- Enable CI triggers for documentation file changes
+- Specify Docker build context with custom file location
+
+## v1.4.300 (2025-08-28)
+
+### PR [#1732](https://github.com/danielmiessler/Fabric/pull/1732) by [ksylvan](https://github.com/ksylvan): CI Infra: Changelog Generation Tool + Docker Image Pubishing
+
+- Add GitHub Actions workflow to publish Docker images on tags
+- Build multi-arch images with Buildx and QEMU across amd64, arm64
+- Tag images using semver; push to GHCR and Docker Hub
+- Gate patterns workflow steps on detected changes instead of failing
+- Auto-detect GitHub owner and repo from git remote URL
+
+## v1.4.299 (2025-08-27)
+
+### PR [#1731](https://github.com/danielmiessler/Fabric/pull/1731) by [ksylvan](https://github.com/ksylvan): chore: upgrade ollama dependency from v0.9.0 to v0.11.7
+
+- Updated ollama package from version 0.9.0 to 0.11.7
+- Fixed 8 security vulnerabilities including 5 high-severity CVEs that could cause denial of service attacks
+- Patched Ollama server vulnerabilities related to division by zero errors and memory exhaustion
+- Resolved security flaws that allowed malicious GGUF model file uploads to crash the server
+- Enhanced system stability and security posture through comprehensive dependency upgrade
+
+## v1.4.298 (2025-08-27)
+
+### PR [#1730](https://github.com/danielmiessler/Fabric/pull/1730) by [ksylvan](https://github.com/ksylvan): Modernize Dockerfile with Best Practices Implementation
+
+- Remove docker-test framework and simplify production docker setup by eliminating complex testing infrastructure
+- Delete entire docker-test directory including test runner scripts and environment configuration files
+- Implement multi-stage build optimization in production Dockerfile to improve build efficiency
+- Remove docker-compose.yml and start-docker.sh helper scripts to streamline container workflow
+- Update README documentation with cleaner Docker usage instructions and reduced image size benefits
+
+## v1.4.297 (2025-08-26)
+
+### PR [#1729](https://github.com/danielmiessler/Fabric/pull/1729) by [ksylvan](https://github.com/ksylvan): Add GitHub Community Health Documents
+
+- Add CODE_OF_CONDUCT defining respectful, collaborative community behavior
+- Add CONTRIBUTING with setup, testing, PR, changelog requirements
+- Add SECURITY policy with reporting process and response timelines
+- Add SUPPORT guide for bugs, features, discussions, expectations
+- Add docs README indexing guides, quick starts, contributor essentials
+
+## v1.4.296 (2025-08-26)
+
+### PR [#1728](https://github.com/danielmiessler/Fabric/pull/1728) by [ksylvan](https://github.com/ksylvan): Refactor Logging System to Use Centralized Debug Logger
+
+- Replace fmt.Fprintf/os.Stderr with centralized debuglog.Log across CLI and add unconditional Log function for important messages
+- Improve OAuth flow messaging and token refresh diagnostics with better error handling
+- Update tests to capture debuglog output via SetOutput for better test coverage
+- Convert Perplexity streaming errors to unified debug logging and emit file write notifications through debuglog
+- Standardize extension registry warnings and announce large audio processing steps via centralized logger
+
+## v1.4.295 (2025-08-24)
+
+### PR [#1727](https://github.com/danielmiessler/Fabric/pull/1727) by [ksylvan](https://github.com/ksylvan): Standardize Anthropic Beta Failure Logging
+
+- Refactor: route Anthropic beta failure logs through internal debug logger
+- Replace fmt.Fprintf stderr with debuglog.Debug for beta failures
+- Import internal log package and remove os dependency
+- Standardize logging level to debuglog.Basic for beta errors
+- Preserve fallback stream behavior when beta features fail
+
 ## v1.4.294 (2025-08-20)
 
 ### PR [#1723](https://github.com/danielmiessler/Fabric/pull/1723) by [ksylvan](https://github.com/ksylvan): docs: update README with Venice AI provider and Windows install script
